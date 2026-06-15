@@ -35,3 +35,5 @@ full_markdown = "\n\n---\n\n".join(
 # Save the concatenated markdown to a file
 with open("output.md", "w", encoding="utf-8") as f:
     f.write(full_markdown)
+
+print("OCR complete. Output saved to 'output.md'.")
