@@ -12,4 +12,4 @@ wheels/
 # Output files
 ocr_response.json
 output.md
-
+chapters/

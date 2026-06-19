@@ -3,7 +3,7 @@ import os
 from mistralai.client import Mistral
 
 parser = argparse.ArgumentParser(description="Process OCR on a document URL.")
-parser.add_argument("document_url", nargs="?", default="https://archive.org/download/UrduBooksCollection_201811/Swila-e-Rahmee.pdf", help="URL of the document to process")
+parser.add_argument("document_url", nargs="?", default="https://ia903104.us.archive.org/2/items/IbnKayem_Dadw/dadw.pdf", help="URL of the document to process")
 args = parser.parse_args()
 
 api_key = os.environ["MISTRAL_API_KEY"]
