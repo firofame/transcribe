@@ -13,3 +13,6 @@ wheels/
 ocr_response.json
 output.md
 splits/
+
+# Local environment variables
+.env

@@ -5,7 +5,7 @@ A simple utility script to process document pages using the Mistral OCR API, con
 ## Prerequisites
 
 - Python >= 3.14
-- Mistral API Key (set as an environment variable `MISTRAL_API_KEY`)
+- Mistral API Key (set as an environment variable `MISTRAL_API_KEY` or in a local `.env` file)
 
 ## Setup
 

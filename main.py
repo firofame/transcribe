@@ -2,10 +2,28 @@ import argparse
 import os
 from mistralai.client import Mistral
 
+
+def load_dotenv(path=".env"):
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                if key and key not in os.environ:
+                    os.environ[key] = value
+    except FileNotFoundError:
+        return
+
+
 parser = argparse.ArgumentParser(description="Process OCR on a document URL.")
 parser.add_argument("document_url", nargs="?", default="https://ia903104.us.archive.org/2/items/IbnKayem_Dadw/dadw.pdf", help="URL of the document to process")
 args = parser.parse_args()
 
+load_dotenv()
 api_key = os.environ["MISTRAL_API_KEY"]
 
 client = Mistral(api_key=api_key)
