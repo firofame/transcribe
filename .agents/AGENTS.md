@@ -9,7 +9,7 @@ This workspace contains configurations and guidelines for translating large OCR-
 ### Rationale
 * **LLM Output Limits:** Large language models (e.g., Gemini 3.5 Flash) have strict output token limits (typically **65,536 tokens**).
 * **Translation Expansion:** Translating text (especially to agglutinative languages or when including phonetic transliterations) increases the output word and token count substantially.
-* **Target Chunk Size:** To prevent generation truncation, source files must be partitioned into chunks targeting **~8,000 - 10,000 source words**.
+* **Target Chunk Size:** To prevent generation truncation, source files must be partitioned into chunks targeting **~12,500 source words**.
 * **Page-Level Consistency:** Splitting should align with page boundaries (e.g., `<!-- Page X -->` markers) to keep structural context intact and make chunk tracking easy.
 * **Index Omission:** Index pages or appendices (like subject, verse, or location indexes) that reference page numbers should be omitted from translation since page numbers do not map to the final translation, and lists of page numbers are not useful for audio/TTS narration.
 
