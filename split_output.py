@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 
 
-def split_markdown_by_pages(file_path, output_dir, target_words=9000, page_pattern=r'<!-- Page (\d+) -->'):
+def split_markdown_by_pages(file_path, output_dir, target_words=10000, page_pattern=r'<!-- Page (\d+) -->'):
     """Split a markdown file into sequential chunks by page markers and target word count."""
     file_path = Path(file_path)
     output_dir = Path(output_dir)
@@ -67,8 +67,8 @@ def split_markdown_by_pages(file_path, output_dir, target_words=9000, page_patte
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Split markdown file by page markers into balanced chunks.")
     parser.add_argument("--input", "-i", default="output.md", help="Path to input markdown file")
-    parser.add_argument("--output-dir", "-o", default="splits-chunks", help="Directory to save chunk files")
-    parser.add_argument("--target-words", "-w", type=int, default=9500, help="Target word count per chunk")
+    parser.add_argument("--output-dir", "-o", default="chunks", help="Directory to save chunk files")
+    parser.add_argument("--target-words", "-w", type=int, default=10000, help="Target word count per chunk")
     parser.add_argument("--pattern", "-p", default=r'<!-- Page (\d+) -->', help="Regex pattern for page markers")
     args = parser.parse_args()
 
