@@ -12,7 +12,7 @@ wheels/
 # Output files
 ocr_response.json
 output.md
-splits/
+chunks/
 
 # Local environment variables
 .env
