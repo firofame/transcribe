@@ -7,7 +7,7 @@ from threading import Lock
 from pathlib import Path
 
 # Paths
-TRANSCRIBE_DIR = Path("/Users/firozahmed/Desktop/transcribe")
+TRANSCRIBE_DIR = Path(__file__).resolve().parent.parent
 CHUNKS_DIR = TRANSCRIBE_DIR / "chunks"
 TRANSLATED_DIR = TRANSCRIBE_DIR / "translated_chunks"
 MASTER_PROMPT_PATH = TRANSCRIBE_DIR / "master_prompt.txt"

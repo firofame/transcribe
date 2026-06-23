@@ -2,8 +2,13 @@ import argparse
 import os
 from mistralai.client import Mistral
 
+# Get project root (parent directory of 'src')
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def load_dotenv(path=".env"):
+
+def load_dotenv(path=None):
+    if path is None:
+        path = os.path.join(PROJECT_ROOT, ".env")
     try:
         with open(path, "r", encoding="utf-8") as f:
             for line in f:
@@ -38,7 +43,8 @@ ocr_response = client.ocr.process(
 )
 
 # Write the OCR response to a JSON file
-with open("ocr_response.json", "w", encoding="utf-8") as f:
+ocr_path = os.path.join(PROJECT_ROOT, "ocr_response.json")
+with open(ocr_path, "w", encoding="utf-8") as f:
     f.write(ocr_response.model_dump_json(indent=2))
 
 # Extract and neatly concatenate the markdown from all pages
@@ -51,7 +57,8 @@ full_markdown = "\n\n---\n\n".join(
 )
 
 # Save the concatenated markdown to a file
-with open("output.md", "w", encoding="utf-8") as f:
+output_path = os.path.join(PROJECT_ROOT, "output.md")
+with open(output_path, "w", encoding="utf-8") as f:
     f.write(full_markdown)
 
 print("OCR complete. Output saved to 'output.md'.")
