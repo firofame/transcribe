@@ -1,3 +1,4 @@
+.DS_Store
 # Python-generated files
 __pycache__/
 *.py[oc]
@@ -12,8 +13,7 @@ wheels/
 # Output files
 data/ocr_response.json
 data/output.md
-data/chunks/
-data/translated_chunks/
+data/chapters
 
 # Local environment variables
 .env
