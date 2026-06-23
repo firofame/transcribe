@@ -13,6 +13,7 @@ wheels/
 ocr_response.json
 output.md
 chunks/
+translated_chunks/
 
 # Local environment variables
 .env
