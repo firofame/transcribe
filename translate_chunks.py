@@ -3,7 +3,6 @@ import sys
 import json
 import urllib.request
 import urllib.error
-import concurrent.futures
 from threading import Lock
 from pathlib import Path
 
@@ -23,7 +22,7 @@ def call_translate_api(port, api_key, system_instructions, chunk_content, model)
             {"role": "system", "content": system_instructions},
             {"role": "user", "content": chunk_content}
         ],
-        "stream": False
+        "stream": True  # Enable streaming to prevent timeouts
     }
     
     req_body = json.dumps(data).encode("utf-8")
@@ -40,15 +39,31 @@ def call_translate_api(port, api_key, system_instructions, chunk_content, model)
     
     with urllib.request.urlopen(req, timeout=600) as response:
         status_code = response.getcode()
-        resp_body = response.read().decode("utf-8")
         if status_code != 200:
+            resp_body = response.read().decode("utf-8")
             raise RuntimeError(f"HTTP Status Code {status_code}: {resp_body}")
         
-        result = json.loads(resp_body)
-        try:
-            return result["choices"][0]["message"]["content"]
-        except (KeyError, IndexError) as e:
-            raise ValueError(f"Unexpected response structure: {resp_body}") from e
+        full_response = []
+        for line in response:
+            line_str = line.decode("utf-8").strip()
+            if not line_str:
+                continue
+            if line_str.startswith("data: "):
+                data_str = line_str[6:]
+                if data_str == "[DONE]":
+                    break
+                try:
+                    event_data = json.loads(data_str)
+                    choices = event_data.get("choices", [])
+                    if choices:
+                        delta = choices[0].get("delta", {})
+                        content = delta.get("content", "")
+                        if content:
+                            full_response.append(content)
+                except Exception:
+                    pass
+        
+        return "".join(full_response)
 
 print_lock = Lock()
 
@@ -136,35 +151,19 @@ def main():
     api_key = os.environ.get("API_KEY", "123456")
     print(f"Connecting to AIStudioToAPI on port {port}...")
 
-    # We use a controlled pool size to prevent hitting API rate limits.
-    # Adjust via environment variable TRANSLATE_WORKERS if desired.
-    max_workers = int(os.environ.get("TRANSLATE_WORKERS", "3"))
-    print(f"Starting parallel translation of {total_chunks} chunks using {max_workers} workers...\n")
+    print(f"Starting sequential translation of {total_chunks} chunks...\n")
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        # Submit all tasks
-        futures = {
-            executor.submit(
-                translate_single_chunk, chunk_file, port, api_key, system_instructions, i, total_chunks
-            ): chunk_file
-            for i, chunk_file in enumerate(chunk_files, start=1)
-        }
-
-        all_success = True
-        for future in concurrent.futures.as_completed(futures):
-            chunk_file = futures[future]
-            try:
-                success = future.result()
-                if not success:
-                    all_success = False
-                    # Cancel remaining pending tasks
-                    for f in futures:
-                        f.cancel()
-            except Exception as e:
-                print(f"Exception raised while translating {chunk_file.name}: {e}", file=sys.stderr)
+    all_success = True
+    for i, chunk_file in enumerate(chunk_files, start=1):
+        try:
+            success = translate_single_chunk(chunk_file, port, api_key, system_instructions, i, total_chunks)
+            if not success:
                 all_success = False
-                for f in futures:
-                    f.cancel()
+                break
+        except Exception as e:
+            print(f"Exception raised while translating {chunk_file.name}: {e}", file=sys.stderr)
+            all_success = False
+            break
 
     if not all_success:
         print("\nError: One or more chunk translations failed. Aborting.", file=sys.stderr)
