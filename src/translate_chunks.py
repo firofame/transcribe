@@ -8,9 +8,10 @@ from pathlib import Path
 
 # Paths
 TRANSCRIBE_DIR = Path(__file__).resolve().parent.parent
-CHUNKS_DIR = TRANSCRIBE_DIR / "chunks"
-TRANSLATED_DIR = TRANSCRIBE_DIR / "translated_chunks"
-MASTER_PROMPT_PATH = TRANSCRIBE_DIR / "master_prompt.txt"
+DATA_DIR = TRANSCRIBE_DIR / "data"
+CHUNKS_DIR = DATA_DIR / "chunks"
+TRANSLATED_DIR = DATA_DIR / "translated_chunks"
+MASTER_PROMPT_PATH = TRANSCRIBE_DIR / "prompts" / "master_prompt.txt"
 
 
 

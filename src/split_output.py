@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-CACHE_FILE = PROJECT_ROOT / "heading_cache.json"
+CACHE_FILE = PROJECT_ROOT / "data" / "heading_cache.json"
 
 
 def load_cache():
@@ -313,8 +313,8 @@ def split_markdown_by_sections(file_path, output_dir, target_words=10000, generi
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Split markdown file by logical section headers into balanced chunks.")
-    parser.add_argument("--input", "-i", default=str(PROJECT_ROOT / "output.md"), help="Path to input markdown file")
-    parser.add_argument("--output-dir", "-o", default=str(PROJECT_ROOT / "chunks"), help="Directory to save chunk files")
+    parser.add_argument("--input", "-i", default=str(PROJECT_ROOT / "data" / "output.md"), help="Path to input markdown file")
+    parser.add_argument("--output-dir", "-o", default=str(PROJECT_ROOT / "data" / "chunks"), help="Directory to save chunk files")
     parser.add_argument("--target-words", "-w", type=int, default=10000, help="Target word count per chunk")
     parser.add_argument("--heading-keywords", nargs="*", default=["فصل", "chapter", "section", "part", "باب", "അദ്ധ്യായം", "ഫസൽ"], help="Keywords that signify generic headings (like 'Chapter' or 'فصل')")
     args = parser.parse_args()

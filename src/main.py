@@ -43,7 +43,9 @@ ocr_response = client.ocr.process(
 )
 
 # Write the OCR response to a JSON file
-ocr_path = os.path.join(PROJECT_ROOT, "ocr_response.json")
+data_dir = os.path.join(PROJECT_ROOT, "data")
+os.makedirs(data_dir, exist_ok=True)
+ocr_path = os.path.join(data_dir, "ocr_response.json")
 with open(ocr_path, "w", encoding="utf-8") as f:
     f.write(ocr_response.model_dump_json(indent=2))
 
@@ -57,7 +59,7 @@ full_markdown = "\n\n---\n\n".join(
 )
 
 # Save the concatenated markdown to a file
-output_path = os.path.join(PROJECT_ROOT, "output.md")
+output_path = os.path.join(data_dir, "output.md")
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(full_markdown)
 
